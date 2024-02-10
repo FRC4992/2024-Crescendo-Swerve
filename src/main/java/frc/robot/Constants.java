@@ -91,6 +91,11 @@ public final class Constants {
     public static final int kClimbMotorLeft = 1; // not correct id
     public static final int kClimbMotorRight = 0; // not correct id
     public static final double kClimbSpeed = 1.00; // determine if this is a good speed
+
+    // modify these as needed
+    public static final double kClimberKP = 0.01;
+    public static final double kClimberKI = 0.01;
+    public static final double kClimberKD = 0.01;
   }
 
 }

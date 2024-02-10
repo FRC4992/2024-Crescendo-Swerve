@@ -5,11 +5,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.math.controller.PIDController;
 
 
 public class Climber extends SubsystemBase {
@@ -20,6 +22,11 @@ public class Climber extends SubsystemBase {
   public final DigitalInput topLimitSwitch;
   public final DigitalInput bottomLimitSwitch;
 
+  public static RelativeEncoder climberEncoder;
+  public final PIDController pid;
+  public static double computedSpeed;
+    public static double setPoint;
+
   public Climber() {
   // initialize motors
   climbMotorLeft = new WPI_TalonSRX(Constants.ClimberConstants.kClimbMotorLeft);
@@ -27,6 +34,9 @@ public class Climber extends SubsystemBase {
 
   topLimitSwitch = new DigitalInput(Constants.OperatorConstants.kTopLimitSwitchPort);
   bottomLimitSwitch = new DigitalInput(Constants.OperatorConstants.kBottomLimitSwitchPort);
+
+  pid = new PIDController(Constants.ClimberConstants.kClimberKP, Constants.ClimberConstants.kClimberKI, Constants.ClimberConstants.kClimberKD);
+  pid.setTolerance(3); // change as needed
   }
 
   public boolean isBottomedOut(){
@@ -38,6 +48,8 @@ public class Climber extends SubsystemBase {
   }
 
   public void extend() {
+  // speeds can be changed to use pid computedSpeed variable if needed
+    // setPoint = 10;
     if(isToppedOut()) {
       stopClimbMotor();
     } else {
@@ -52,6 +64,8 @@ public class Climber extends SubsystemBase {
   }
 
   public void retract() {
+  // speeds can be changed to use pid computedSpeed variable if needed
+    // setPoint = 0;
     if(isBottomedOut()) {
       stopClimbMotor();
     } else {
@@ -63,5 +77,6 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    computedSpeed = pid.calculate(climberEncoder.getPosition(), setPoint);
   }
 }
