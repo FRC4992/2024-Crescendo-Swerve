@@ -19,24 +19,17 @@ public class Climber extends SubsystemBase {
   WPI_TalonSRX climbMotorLeft;
   WPI_TalonSRX climbMotorRight;
   
-  public final DigitalInput topLimitSwitch;
-  public final DigitalInput bottomLimitSwitch;
-
-  public static RelativeEncoder climberEncoder;
-  public final PIDController pid;
-  public static double computedSpeed;
-    public static double setPoint;
+  public final DigitalInput leftMagSensor;
+  public final DigitalInput rightMagSensor;
 
   public Climber() {
   // initialize motors
   climbMotorLeft = new WPI_TalonSRX(Constants.ClimberConstants.kClimbMotorLeft);
   climbMotorRight = new WPI_TalonSRX(Constants.ClimberConstants.kClimbMotorRight);
 
-  topLimitSwitch = new DigitalInput(Constants.OperatorConstants.kTopLimitSwitchPort);
-  bottomLimitSwitch = new DigitalInput(Constants.OperatorConstants.kBottomLimitSwitchPort);
+  leftMagSensor = new DigitalInput(Constants.ClimberConstants.kClimbMotorLeft);
+  rightMagSensor = new DigitalInput(Constants.ClimberConstants.kClimbMotorRight);
 
-  pid = new PIDController(Constants.ClimberConstants.kClimberKP, Constants.ClimberConstants.kClimberKI, Constants.ClimberConstants.kClimberKD);
-  pid.setTolerance(3); // change as needed
   }
 
   public boolean isBottomedOut(){
@@ -77,6 +70,5 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    computedSpeed = pid.calculate(climberEncoder.getPosition(), setPoint);
   }
 }

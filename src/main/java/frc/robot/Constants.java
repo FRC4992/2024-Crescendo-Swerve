@@ -23,9 +23,6 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDeadband = 0.15;
-
-    public static final int kTopLimitSwitchPort = 0; // check which port this will be in
-    public static final int kBottomLimitSwitchPort = 0; // check which port this will be in
   }
 
   public static class DriveConstants {
@@ -88,14 +85,17 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final int kClimbMotorLeft = 1; // not correct id
-    public static final int kClimbMotorRight = 0; // not correct id
-    public static final double kClimbSpeed = 1.00; // determine if this is a good speed
+    public static final int kClimbMotorLeft = 1;
+    public static final int kClimbMotorRight = 0; 
+    public static final double kClimbSpeed = 0.50;
+    public static final int kLeftMagSensorPort = 0; 
+    public static final int kRightMagSensorPort = 1;
+  }
 
-    // modify these as needed
-    public static final double kClimberKP = 0.01;
-    public static final double kClimberKI = 0.01;
-    public static final double kClimberKD = 0.01;
+  public static class IntakeConstants {
+    public static final int kIntakeRotationMotorID = 30;
+    public static final int kIntakeRollerMotorID = 31;
+    public static final int kTopLimitSwitchID = 3;
   }
 
 }

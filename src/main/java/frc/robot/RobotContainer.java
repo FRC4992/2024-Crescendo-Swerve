@@ -7,10 +7,13 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.Extend;
 import frc.robot.commands.IntakeFromShooter;
 import frc.robot.commands.ResetHeading;
+import frc.robot.commands.Retract;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
@@ -36,6 +39,8 @@ public class RobotContainer {
   public static SwerveDrive swerve = new SwerveDrive();
   
   public static Shooter shooter = new Shooter();
+
+  public static Climber climber = new Climber();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -67,8 +72,10 @@ public class RobotContainer {
     // For field-oriented swerve, reset heading on button press
     m_driverController.b().onTrue(new ResetHeading());
 
-    m_driverController.x().onTrue(new Shoot());
+    m_driverController.rightTrigger().onTrue(new Shoot());
     m_driverController.a().whileTrue(new IntakeFromShooter());
+    m_driverController.leftBumper().onTrue(new Extend());
+    m_driverController.rightBumper().onTrue(new Retract());
   }
 
   /**
