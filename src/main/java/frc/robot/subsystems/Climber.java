@@ -22,6 +22,7 @@ public class Climber extends SubsystemBase {
   public final DigitalInput leftMagSensor;
   public final DigitalInput rightMagSensor;
 
+
   public Climber() {
   // initialize motors
   climbMotorLeft = new WPI_TalonSRX(Constants.ClimberConstants.kClimbMotorLeft);
@@ -32,38 +33,31 @@ public class Climber extends SubsystemBase {
 
   }
 
-  public boolean isBottomedOut(){
-    return !bottomLimitSwitch.get();
+  public boolean isBottomedOutLeft(){
+    return !leftMagSensor.get();
   }
 
-  public boolean isToppedOut(){
-    return !topLimitSwitch.get();
+  public boolean isBottomedOutRight(){
+    return !rightMagSensor.get();
   }
 
   public void extend() {
-  // speeds can be changed to use pid computedSpeed variable if needed
-    // setPoint = 10;
-    if(isToppedOut()) {
-      stopClimbMotor();
-    } else {
     climbMotorLeft.set(Constants.ClimberConstants.kClimbSpeed);
-    climbMotorRight.set(-Constants.ClimberConstants.kClimbSpeed); // check if this is right spot for negative
-    }
+    climbMotorRight.set(Constants.ClimberConstants.kClimbSpeed);
   }
   
-  public void stopClimbMotor() {
+  public void stopClimbMotors() {
   climbMotorLeft.stopMotor();
   climbMotorRight.stopMotor();
   }
 
   public void retract() {
-  // speeds can be changed to use pid computedSpeed variable if needed
-    // setPoint = 0;
-    if(isBottomedOut()) {
-      stopClimbMotor();
-    } else {
-    climbMotorLeft.set(-Constants.ClimberConstants.kClimbSpeed); // check
-    climbMotorRight.set(Constants.ClimberConstants.kClimbSpeed);
+    if (!isBottomedOutLeft()){
+      climbMotorLeft.set(-Constants.ClimberConstants.kClimbSpeed);
+      climbMotorRight.set(Constants.ClimberConstants.kClimbSpeed);
+    }
+    else{
+      stopClimbMotors();
     }
   }
 
