@@ -4,14 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.math.controller.PIDController;
 
 
 public class Climber extends SubsystemBase {
@@ -52,13 +50,23 @@ public class Climber extends SubsystemBase {
   }
 
   public void retract() {
-    if (!isBottomedOutLeft()){
+    if (!isBottomedOutLeft() || !isBottomedOutRight()){
       climbMotorLeft.set(-Constants.ClimberConstants.kClimbSpeed);
       climbMotorRight.set(Constants.ClimberConstants.kClimbSpeed);
     }
     else{
       stopClimbMotors();
     }
+  }
+
+  public void setBrakeMode() {
+    climbMotorLeft.setNeutralMode(NeutralMode.Brake);
+    climbMotorRight.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void setCoastMode() {
+    climbMotorLeft.setNeutralMode(NeutralMode.Coast);
+    climbMotorRight.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override

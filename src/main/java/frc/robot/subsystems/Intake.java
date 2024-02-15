@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -37,8 +36,12 @@ public class Intake extends SubsystemBase {
     topLimitSwitch = new DigitalInput(Constants.IntakeConstants.kTopLimitSwitchID);
 
     intakeRotationEncoder = intakeRotationMotor.getEncoder();
+
+    //intakeRotationMotor.setInverted(true);
+    //intakeRollerMotor.setInverted(true);
   
     intakePID = new PIDController(Constants.IntakeConstants.kIntakeKP, Constants.IntakeConstants.kIntakeKI, Constants.IntakeConstants.kIntakeKP);
+  
   }
 
   public boolean hasReachedMax() {
@@ -46,6 +49,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void resetEncoder() {
+    // set encoder position to constant at top limit
   }
 
   @Override
@@ -55,6 +59,6 @@ public class Intake extends SubsystemBase {
       resetEncoder(); 
     }
 
-    calculatedSpeed = intakePID.calculate(currentPos,setPoint);
+    calculatedSpeed = intakePID.calculate(currentPos, setPoint);
   }
 }
