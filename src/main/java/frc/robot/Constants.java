@@ -96,6 +96,9 @@ public final class Constants {
     public static final int kIntakeRotationMotorID = 30;
     public static final int kIntakeRollerMotorID = 31;
     public static final int kTopLimitSwitchID = 3;
+    public static final double kIntakeKP = 0.1;
+    public static final double kIntakeKI = 0.1;
+    public static final double kIntakeKD = 0.1;
   }
 
 }
