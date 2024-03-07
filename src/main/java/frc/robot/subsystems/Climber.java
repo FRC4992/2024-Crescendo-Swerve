@@ -9,7 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.ClimberConstants;
 
 
 public class Climber extends SubsystemBase {
@@ -23,11 +23,11 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
   // initialize motors
-  climbMotorLeft = new WPI_TalonSRX(Constants.ClimberConstants.kClimbMotorLeft);
-  climbMotorRight = new WPI_TalonSRX(Constants.ClimberConstants.kClimbMotorRight);
+  climbMotorLeft = new WPI_TalonSRX(ClimberConstants.kClimbMotorLeft);
+  climbMotorRight = new WPI_TalonSRX(ClimberConstants.kClimbMotorRight);
 
-  leftMagSensor = new DigitalInput(Constants.ClimberConstants.kClimbMotorLeft);
-  rightMagSensor = new DigitalInput(Constants.ClimberConstants.kClimbMotorRight);
+  leftMagSensor = new DigitalInput(ClimberConstants.kLeftMagSensorPort);
+  rightMagSensor = new DigitalInput(ClimberConstants.kRightMagSensorPort);
 
   }
 
@@ -40,8 +40,8 @@ public class Climber extends SubsystemBase {
   }
 
   public void extend() {
-    climbMotorLeft.set(Constants.ClimberConstants.kClimbSpeed);
-    climbMotorRight.set(Constants.ClimberConstants.kClimbSpeed);
+    climbMotorLeft.set(ClimberConstants.kClimbSpeed);
+    climbMotorRight.set(ClimberConstants.kClimbSpeed);
   }
   
   public void stopClimbMotors() {
@@ -51,8 +51,8 @@ public class Climber extends SubsystemBase {
 
   public void retract() {
     if (!isBottomedOutLeft() || !isBottomedOutRight()){
-      climbMotorLeft.set(-Constants.ClimberConstants.kClimbSpeed);
-      climbMotorRight.set(Constants.ClimberConstants.kClimbSpeed);
+      climbMotorLeft.set(-ClimberConstants.kClimbSpeed);
+      climbMotorRight.set(ClimberConstants.kClimbSpeed);
     }
     else{
       stopClimbMotors();

@@ -6,53 +6,49 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.Constants.DriveConstants;
 
 public class SwerveDrive extends SubsystemBase {
 
   public SwerveModule FLModule = new SwerveModule(
-    Constants.DriveConstants.kFLDriveMotorID, 
-    Constants.DriveConstants.kFLRotationMotorID, 
-    Constants.DriveConstants.kFLCancoderID, 
+    DriveConstants.kFLDriveMotorID, 
+    DriveConstants.kFLRotationMotorID, 
+    DriveConstants.kFLCancoderID, 
     false, 
     true, 
-    Constants.DriveConstants.kFLOffset, // abs enc offset, add to constants, paramter here
+    DriveConstants.kFLOffset, // abs enc offset, add to constants, paramter here
     false); // abs enc reversed, add to constants, parameter here
 
   SwerveModule FRModule = new SwerveModule(
-    Constants.DriveConstants.kFRDriveMotorID, 
-    Constants.DriveConstants.kFRRotationMotorID, 
-    Constants.DriveConstants.kFRCancoderID, 
+    DriveConstants.kFRDriveMotorID, 
+    DriveConstants.kFRRotationMotorID, 
+    DriveConstants.kFRCancoderID, 
     true, 
     true, 
-    Constants.DriveConstants.kFROffset, // abs enc offset, add to constants, paramter here
+    DriveConstants.kFROffset, // abs enc offset, add to constants, paramter here
     false); // abs enc reversed, add to constants, parameter here
 
   SwerveModule BLModule = new SwerveModule(
-    Constants.DriveConstants.kBLDriveMotorID, 
-    Constants.DriveConstants.kBLRotationMotorID, 
-    Constants.DriveConstants.kBLCancoderID, 
+    DriveConstants.kBLDriveMotorID, 
+    DriveConstants.kBLRotationMotorID, 
+    DriveConstants.kBLCancoderID, 
     false, 
     true, 
-    Constants.DriveConstants.kBLOffset, // abs enc offset, add to constants, paramter here
+    DriveConstants.kBLOffset, // abs enc offset, add to constants, paramter here
     false); // abs enc reversed, add to constants, parameter here
 
   SwerveModule BRModule = new SwerveModule(
-    Constants.DriveConstants.kBRDriveMotorID, 
-    Constants.DriveConstants.kBRRotationMotorID, 
-    Constants.DriveConstants.kBRCancoderID, 
+    DriveConstants.kBRDriveMotorID, 
+    DriveConstants.kBRRotationMotorID, 
+    DriveConstants.kBRCancoderID, 
     true, 
     true, 
-    Constants.DriveConstants.kBROffset, // abs enc offset, add to constants, paramter here
+    DriveConstants.kBROffset, // abs enc offset, add to constants, paramter here
     false); // abs enc reversed, add to constants, parameter here
 
   AHRS navx = new AHRS(SPI.Port.kMXP);
@@ -102,7 +98,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DriveConstants.kMaxSpeedMetersPerSec);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSec);
     FLModule.setDesiredState(desiredStates[0]);
     FRModule.setDesiredState(desiredStates[1]);
     BLModule.setDesiredState(desiredStates[2]);

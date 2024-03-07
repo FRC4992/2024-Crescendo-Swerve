@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -62,7 +59,7 @@ public final class Constants {
     //
 
 
-    public static final double kMaxSpeedMetersPerSec = 4.0; // add max speed
+    public static final double kMaxSpeedMetersPerSec = 3.0; // add max speed
   }
 
   public static class SwerveConstants {
@@ -78,27 +75,28 @@ public final class Constants {
   }
 
   public static class ShooterConstants {
-    public static final int kShooterMotorID = 6;
-    public static final int kFeedMotorID = 7;
+    public static final int kShooterMotorID = 5;
+    public static final int kFeedMotorID = 4;
     public static final double kShooterSpeed = 1.00;
     public static final double kFeedSpeed = 1.00;
   }
 
   public static class ClimberConstants {
-    public static final int kClimbMotorLeft = 1;
-    public static final int kClimbMotorRight = 0; 
+    public static final int kClimbMotorLeft = 101;
+    public static final int kClimbMotorRight = 100; 
     public static final double kClimbSpeed = 0.50;
-    public static final int kLeftMagSensorPort = 0; 
+    public static final int kLeftMagSensorPort = 2; 
     public static final int kRightMagSensorPort = 1;
   }
 
   public static class IntakeConstants {
-    public static final int kIntakeRotationMotorID = 30;
-    public static final int kIntakeRollerMotorID = 31;
-    public static final int kTopLimitSwitchID = 3;
-    public static final double kIntakeKP = 0.1;
-    public static final double kIntakeKI = 0.1;
-    public static final double kIntakeKD = 0.1;
+    public static final int kIntakeRotationMotorID = 2;
+    public static final int kIntakeRollerMotorID = 3;
+    public static final int kTopLimitSwitchID = 0;
+    public static final double kIntakeKP = 0.03;
+    public static final double kIntakeKI = 0.0;
+    public static final double kIntakeKD = 0.0;
+    public static final double kIntakeMaxSpeed = 0.5; // tune
   }
 
 }

@@ -4,14 +4,12 @@
 
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.SwerveDrive;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -39,9 +37,9 @@ public class SwerveDriveCommand extends Command {
     this.controller = controller;
 
     this.swerve = swerve;
-    this.xSpdFunction = xSpdFunction;
-    this.ySpdFunction = ySpdFunction;
-    this.rotationSpdFunction = rotationSpdFunction;
+    // this.xSpdFunction = xSpdFunction;
+    // this.ySpdFunction = ySpdFunction;
+    // this.rotationSpdFunction = rotationSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
 
     // Rate limitiers - add to constants if needed
@@ -63,17 +61,17 @@ public class SwerveDriveCommand extends Command {
     //System.out.println(RobotContainer.swerve.FLModule.getState());
     //System.out.println(RobotContainer.m_driverController.getLeftX());
 
-    double xSpeed = -controller.getLeftY();
-    double ySpeed = -controller.getLeftX();
+    double xSpeed = controller.getLeftY();
+    double ySpeed = controller.getLeftX();
     double rotationSpeed = -controller.getRightX();
     // double xSpeed = xSpdFunction;
     // double ySpeed = ySpdFunction;
     // double rotationSpeed = rotationSpdFunction;
 
     // For deadband
-    xSpeed = Math.abs(xSpeed) > Constants.OperatorConstants.kDeadband ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpeed) > Constants.OperatorConstants.kDeadband ? ySpeed : 0.0;
-    rotationSpeed = Math.abs(rotationSpeed) > Constants.OperatorConstants.kDeadband ? rotationSpeed : 0.0;
+    xSpeed = Math.abs(xSpeed) > OperatorConstants.kDeadband ? xSpeed : 0.0;
+    ySpeed = Math.abs(ySpeed) > OperatorConstants.kDeadband ? ySpeed : 0.0;
+    rotationSpeed = Math.abs(rotationSpeed) > OperatorConstants.kDeadband ? rotationSpeed : 0.0;
 
     // Rate limiter
     //xSpeed = xLimiter.calculate(xSpeed) * Constants.DriveConstants.TELEOP_MAX_SPEED_METERS_PER_SECOND;
@@ -89,7 +87,7 @@ public class SwerveDriveCommand extends Command {
       //System.out.println(chassisSpeeds);
     }
 
-    SwerveModuleState[] moduleStates = Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC.toSwerveModuleStates(chassisSpeeds);
+    SwerveModuleState[] moduleStates = DriveConstants.SWERVE_DRIVE_KINEMATIC.toSwerveModuleStates(chassisSpeeds);
 
     swerve.setModuleStates(moduleStates);
   }

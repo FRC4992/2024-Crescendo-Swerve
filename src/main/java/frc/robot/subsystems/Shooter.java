@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -16,12 +16,12 @@ public class Shooter extends SubsystemBase {
   WPI_TalonSRX feedMotor;
 
   public Shooter() {
-    shootMotor = new WPI_TalonSRX(Constants.ShooterConstants.kShooterMotorID);
-    feedMotor = new WPI_TalonSRX(Constants.ShooterConstants.kFeedMotorID);
+    shootMotor = new WPI_TalonSRX(ShooterConstants.kShooterMotorID);
+    feedMotor = new WPI_TalonSRX(ShooterConstants.kFeedMotorID);
   }
 
   public void shoot() {
-    shootMotor.set(Constants.ShooterConstants.kShooterSpeed);
+    shootMotor.set(ShooterConstants.kShooterSpeed);
   }
 
   public void stopShootMotor() {
@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void feed() {
-    feedMotor.set(Constants.ShooterConstants.kFeedSpeed);
+    feedMotor.set(ShooterConstants.kFeedSpeed);
   }
   
   public void stopFeedMotor() {
@@ -37,10 +37,9 @@ public class Shooter extends SubsystemBase {
   }
 
   public void intake() {
-    System.out.println("Running");
-    shootMotor.set(-Constants.ShooterConstants.kShooterSpeed);
+    shootMotor.set(-ShooterConstants.kShooterSpeed);
     //shootMotor.set(-0.9);
-    feedMotor.set(-Constants.ShooterConstants.kFeedSpeed);
+    feedMotor.set(-ShooterConstants.kFeedSpeed);
   }
 
   @Override

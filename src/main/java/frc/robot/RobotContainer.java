@@ -5,18 +5,27 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Extend;
 import frc.robot.commands.IntakeFromShooter;
 import frc.robot.commands.ResetHeading;
 import frc.robot.commands.Retract;
+import frc.robot.commands.SetIntakeLevel;
+import frc.robot.commands.SetIntakeState;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Intake.IntakeLevels;
+import frc.robot.subsystems.Intake.IntakeStates;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,16 +46,31 @@ public class RobotContainer {
 
 
   public static SwerveDrive swerve = new SwerveDrive();
-  
   public static Shooter shooter = new Shooter();
-
   public static Climber climber = new Climber();
+  public static Intake intake = new Intake();
+
+  public static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+  public static NetworkTableEntry tx = table.getEntry("tx");
+  public static NetworkTableEntry ta = table.getEntry("ta");
+  public static NetworkTableEntry tv = table.getEntry("tv");
+
+  public static double getLimelightX() {
+    return tx.getDouble(0.0);
+  }
+  public static double getLimelightArea() {
+    return ta.getDouble(0.0);
+  }
+  public static boolean getLimelightFoundTarget() {
+    return tv.getDouble(0) == 1;
+  }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
 
-    swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, true));
+    swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, false));
     //swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, 0.5, 0, 0, false));
     configureBindings();
   }
@@ -70,12 +94,23 @@ public class RobotContainer {
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     // For field-oriented swerve, reset heading on button press
-    m_driverController.b().onTrue(new ResetHeading());
+    //m_driverController.b().onTrue(new ResetHeading());
 
-    m_driverController.rightTrigger().onTrue(new Shoot());
-    m_driverController.a().whileTrue(new IntakeFromShooter());
-    m_driverController.leftBumper().onTrue(new Extend());
-    m_driverController.rightBumper().onTrue(new Retract());
+    //m_driverController.y().onTrue(new Shoot());
+    //m_driverController.a().whileTrue(new IntakeFromShooter());
+    m_driverController.leftBumper().onTrue(new IntakeFromShooter());
+    m_driverController.rightBumper().onTrue(new Shoot());
+    // m_driverController.leftBumper().onTrue(new Extend());
+    // m_driverController.rightBumper().onTrue(new Retract());
+
+    m_driverController.y().whileTrue(new AutoAlign());
+
+    m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
+    m_driverController.x().onTrue(new SetIntakeLevel(IntakeLevels.STOWED));
+    m_driverController.a().onTrue(new SetIntakeLevel(IntakeLevels.AMP));
+    m_driverController.povDown().whileTrue(new SetIntakeState(IntakeStates.INTAKE));
+    m_driverController.povUp().whileTrue(new SetIntakeState(IntakeStates.FEED));
+    m_driverController.povRight().whileTrue(new SetIntakeState(IntakeStates.EJECT));
   }
 
   /**

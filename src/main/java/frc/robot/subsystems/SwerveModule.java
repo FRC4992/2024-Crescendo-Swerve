@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 
 import com.revrobotics.RelativeEncoder;
@@ -19,7 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveModule extends SubsystemBase {
@@ -55,12 +53,12 @@ public class SwerveModule extends SubsystemBase {
     rotationEncoder = rotationMotor.getEncoder();
     absoluteEncoder = new CANcoder(canCoderID);
 
-    distanceEncoder.setPositionConversionFactor(Constants.SwerveConstants.kDriveEncoderRotToMeter);
-    distanceEncoder.setVelocityConversionFactor(Constants.SwerveConstants.kDriveEncoderRPMToMetersPerSec);
-    rotationEncoder.setPositionConversionFactor(Constants.SwerveConstants.kRotationEncoderRotToRad);
-    rotationEncoder.setVelocityConversionFactor(Constants.SwerveConstants.kRotationEncoderRPMToRadsPerSec);
+    distanceEncoder.setPositionConversionFactor(SwerveConstants.kDriveEncoderRotToMeter);
+    distanceEncoder.setVelocityConversionFactor(SwerveConstants.kDriveEncoderRPMToMetersPerSec);
+    rotationEncoder.setPositionConversionFactor(SwerveConstants.kRotationEncoderRotToRad);
+    rotationEncoder.setVelocityConversionFactor(SwerveConstants.kRotationEncoderRPMToRadsPerSec);
 
-    rotationPIDController = new PIDController(Constants.SwerveConstants.KPTurning, 0, 0);
+    rotationPIDController = new PIDController(SwerveConstants.KPTurning, 0, 0);
     rotationPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     this.absoluteEncoderOffsetRaw = absoluteEncoderOffset;
@@ -128,7 +126,7 @@ public class SwerveModule extends SubsystemBase {
     state = SwerveModuleState.optimize(state, getState().angle);
     currentState = state;
     //System.out.println(state);
-    driveMotor.set(state.speedMetersPerSecond / Constants.DriveConstants.kMaxSpeedMetersPerSec);
+    driveMotor.set(state.speedMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSec); // change to increase speed
     rotationMotor.set(rotationPIDController.calculate(getRotationPosition(), state.angle.getRadians()));
     
     SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] state", state.toString());
