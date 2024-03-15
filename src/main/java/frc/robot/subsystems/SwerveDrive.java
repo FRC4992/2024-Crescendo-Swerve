@@ -81,13 +81,6 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    // double loggingState[] = {
-
-    // };
-
-    //SmartDashboard.putNumber("Robot Heading", getHeading());
-
   }
 
   public void stopModules() {

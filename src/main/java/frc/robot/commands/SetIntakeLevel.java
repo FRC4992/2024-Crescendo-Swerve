@@ -37,7 +37,7 @@ public class SetIntakeLevel extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.intake.stopRotationMotor();
+    RobotContainer.intake.stopRotationMotor(); // check
   }
 
   // Returns true when the command should end.

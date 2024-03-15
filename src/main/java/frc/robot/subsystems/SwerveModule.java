@@ -92,9 +92,7 @@ public class SwerveModule extends SubsystemBase {
     return getAbsoluteEncoderPositionRaw().getValue() * 360; // gets value as double
   }
 
-  public double getAbsoluteEncoderRad() {
-    //return Math.toRadians(getAbsoluteEncoderDeg()); // changes to radians
-  
+  public double getAbsoluteEncoderRad() {  
     // check: (changes to radians, add/subtract absolute offset)
     if(absoluteEncoderReversed) {
       return -Math.toRadians(getAbsoluteEncoderDeg()) - this.absoluteEncoderOffsetRad;
@@ -113,19 +111,12 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState state) {
-
-    //System.out.println(getAbsoluteEncoderDeg() - absoluteEncoderOffsetDeg);
-    SmartDashboard.putNumber("Swerve[" + absoluteEncoder.getDeviceID() + "] absolute angle", getAbsoluteEncoderDeg() - absoluteEncoderOffsetDeg);
-    SmartDashboard.putNumber("Swerve[" + absoluteEncoder.getDeviceID() + "] rotation position angle", getRotationPosition());
-
     if(Math.abs(state.speedMetersPerSecond) < 0.001) {
       stop();
       return;
     }
-    //System.out.println("running");
     state = SwerveModuleState.optimize(state, getState().angle);
     currentState = state;
-    //System.out.println(state);
     driveMotor.set(state.speedMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSec); // change to increase speed
     rotationMotor.set(rotationPIDController.calculate(getRotationPosition(), state.angle.getRadians()));
     

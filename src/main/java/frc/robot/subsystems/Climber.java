@@ -41,7 +41,7 @@ public class Climber extends SubsystemBase {
 
   public void extend() {
     climbMotorLeft.set(ClimberConstants.kClimbSpeed);
-    climbMotorRight.set(ClimberConstants.kClimbSpeed);
+    climbMotorRight.set(-ClimberConstants.kClimbSpeed);
   }
   
   public void stopClimbMotors() {

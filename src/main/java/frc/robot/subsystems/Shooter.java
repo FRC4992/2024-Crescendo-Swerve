@@ -6,8 +6,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ShooterConstants;;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.SetIntakeState;
+import frc.robot.subsystems.Intake.IntakeStates;;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -37,9 +42,30 @@ public class Shooter extends SubsystemBase {
   }
 
   public void intake() {
-    shootMotor.set(-ShooterConstants.kShooterSpeed);
-    //shootMotor.set(-0.9);
-    feedMotor.set(-ShooterConstants.kFeedSpeed);
+    shootMotor.set(-ShooterConstants.kShooterSpeed/2);
+    feedMotor.set(-ShooterConstants.kFeedSpeed/2);
+  }
+
+  public Command getSpeakerShootCommand() {
+    return new InstantCommand(this::shoot, this)
+      .andThen(
+        new InstantCommand(this::feed, this))
+      .andThen(
+        new WaitCommand(1.75))
+      .andThen(
+        new SetIntakeState(IntakeStates.BOUNCE))
+      .andThen(
+        new WaitCommand(0.20))
+      .andThen(
+        new SetIntakeState(IntakeStates.FEED))
+      .andThen(
+        new WaitCommand(0.75))
+      .andThen(
+        new SetIntakeState(IntakeStates.ZERO))
+      .andThen(
+        new InstantCommand(this::stopShootMotor, this))
+      .andThen(
+        new InstantCommand(this::stopFeedMotor, this));  
   }
 
   @Override

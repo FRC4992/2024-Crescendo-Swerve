@@ -23,10 +23,14 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Intake.IntakeLevels;
 import frc.robot.subsystems.Intake.IntakeStates;
+
+import javax.swing.border.EtchedBorder;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -94,23 +98,23 @@ public class RobotContainer {
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     // For field-oriented swerve, reset heading on button press
-    //m_driverController.b().onTrue(new ResetHeading());
 
-    //m_driverController.y().onTrue(new Shoot());
-    //m_driverController.a().whileTrue(new IntakeFromShooter());
-    m_driverController.leftBumper().onTrue(new IntakeFromShooter());
-    m_driverController.rightBumper().onTrue(new Shoot());
-    // m_driverController.leftBumper().onTrue(new Extend());
-    // m_driverController.rightBumper().onTrue(new Retract());
+    m_driverController.leftBumper().whileTrue(new IntakeFromShooter());
+    //m_driverController.rightBumper().onTrue(new Shoot());
+    m_driverController.rightBumper().onTrue(shooter.getSpeakerShootCommand());
 
-    m_driverController.y().whileTrue(new AutoAlign());
+    //m_driverController.y().whileTrue(new AutoAlign());
+    m_driverController.y().onTrue(new ResetHeading());
 
-    m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
-    m_driverController.x().onTrue(new SetIntakeLevel(IntakeLevels.STOWED));
-    m_driverController.a().onTrue(new SetIntakeLevel(IntakeLevels.AMP));
-    m_driverController.povDown().whileTrue(new SetIntakeState(IntakeStates.INTAKE));
-    m_driverController.povUp().whileTrue(new SetIntakeState(IntakeStates.FEED));
-    m_driverController.povRight().whileTrue(new SetIntakeState(IntakeStates.EJECT));
+    //m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
+    m_driverController.b().onTrue(intake.intakeAndLoadCommand());
+    m_driverController.x().onTrue(new SetIntakeLevel(IntakeLevels.STOWED)); //
+    m_driverController.a().onTrue(new SetIntakeLevel(IntakeLevels.AMP)); // 
+    m_driverController.povDown().whileTrue(new SetIntakeState(IntakeStates.INTAKE)); // 
+    m_driverController.povUp().whileTrue(new SetIntakeState(IntakeStates.FEED)); // 
+    m_driverController.povRight().whileTrue(new SetIntakeState(IntakeStates.EJECT)); // 
+    m_driverController.back().whileTrue(new Retract());
+    m_driverController.start().whileTrue(new Extend());
   }
 
   /**

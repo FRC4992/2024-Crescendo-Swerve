@@ -8,15 +8,18 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-// import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-// import com.revrobotics.Rev2mDistanceSensor.Port;
-// import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
+import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.IntakeConstants;
-
+import frc.robot.commands.SetIntakeLevel;
+import frc.robot.commands.SetIntakeState;
 import edu.wpi.first.math.controller.PIDController;
 
 public class Intake extends SubsystemBase {
@@ -29,7 +32,7 @@ public class Intake extends SubsystemBase {
   PIDController intakePID;
 
   DigitalInput topLimitSwitch;
-  //Rev2mDistanceSensor distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+  Rev2mDistanceSensor distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
 
   private boolean isAtTarget;
 
@@ -51,9 +54,9 @@ public class Intake extends SubsystemBase {
     intakePID = new PIDController(IntakeConstants.kIntakeKP, IntakeConstants.kIntakeKI, IntakeConstants.kIntakeKD);
     intakePID.setTolerance(3.5); // encoder ticks
 
-    // distanceSensor.setAutomaticMode(true);
-    // distanceSensor.setEnabled(true);
-    // distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
+    distanceSensor.setAutomaticMode(true);
+    distanceSensor.setEnabled(true);
+    distanceSensor.setRangeProfile(RangeProfile.kHighAccuracy);
 
     currentLevel = IntakeLevels.STOWED; // change based on starting position
     currentState = IntakeStates.ZERO; // starts with 0 speed
@@ -72,6 +75,7 @@ public class Intake extends SubsystemBase {
     INTAKE, // Intake note
     FEED, // Feed to shooter
     EJECT, // Amp scoring
+    BOUNCE, // Bounce note before shooting
   }
 
   public double intakeStateToSpeed(IntakeStates desiredState) {
@@ -79,11 +83,13 @@ public class Intake extends SubsystemBase {
       case ZERO:
         return 0.0;
       case INTAKE:
-        return -0.50;
+        return -0.35;
       case FEED: 
-        return 0.50;
+        return 0.90;
       case EJECT:
         return 0.80;
+      case BOUNCE:
+        return -0.30;
       default:
         return 0.0;
     }
@@ -91,8 +97,8 @@ public class Intake extends SubsystemBase {
 
   public double intakeLevelToEncoderPosition(IntakeLevels desiredLevel) {
     switch(desiredLevel) {
-      case GROUND:
-        return -105.2626953125;
+      case GROUND: 
+        return -114.42947387695312;
       case AMP:
         return -43.3817138861875;
       case STOWED:
@@ -127,14 +133,15 @@ public class Intake extends SubsystemBase {
     intakeRotationEncoder.setPosition(ticks);
   }
 
-  // public boolean noteLoaded() {
-  //   if(distanceSensor.getRange() < 8.0) { // set measurement
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
+  public boolean noteLoaded() {
+    if(distanceSensor.getRange() < 8.0) { // set measurement
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   public void setRotationMotor(double speed) {
     intakeRotationMotor.set(speed);
   }
@@ -173,11 +180,38 @@ public class Intake extends SubsystemBase {
     intakeRotationMotor.setIdleMode(IdleMode.kCoast);
   }
 
+  public Command intakeAndLoadCommand() {
+    return new SetIntakeLevel(IntakeLevels.GROUND)
+      .andThen(
+        new SetIntakeState(IntakeStates.INTAKE))
+      .andThen(
+        new WaitCommand(3))
+      .andThen(
+        new SetIntakeState(IntakeStates.ZERO))
+      .andThen(new SetIntakeLevel(IntakeLevels.STOWED));
+
+    // return new SetIntakeLevel(IntakeLevels.GROUND)
+    //   .andThen(
+    //     new SetIntakeState(IntakeStates.INTAKE).until(() -> noteLoaded()))
+    //   .andThen(
+    //     new SetIntakeState(IntakeStates.ZERO))
+    //   .andThen(new SetIntakeLevel(IntakeLevels.STOWED));
+  }
+
+  public Command getAmpShootCommand() {
+    return new SetIntakeLevel(IntakeLevels.AMP)
+      .andThen(new WaitCommand(1.5))
+      .andThen(new SetIntakeState(IntakeStates.EJECT))
+      .andThen(new WaitCommand(0.5))
+      .andThen(new SetIntakeState(IntakeStates.ZERO))
+      .andThen(new SetIntakeLevel(IntakeLevels.STOWED));
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(intakeRotationEncoder.getPosition());
-    System.out.println("current level: " + this.currentLevel);
+    //System.out.println(intakeRotationEncoder.getPosition());
+    //System.out.println("current level: " + this.currentLevel);
 
     double currentPosition = intakeRotationEncoder.getPosition();
     double targetPosition = intakeLevelToEncoderPosition(currentLevel);
@@ -186,9 +220,9 @@ public class Intake extends SubsystemBase {
       resetEncoder(0); 
     }
 
-    // if(currentState == IntakeStates.INTAKE && noteLoaded()) { // stop intake if note is loaded
-    //   currentState = IntakeStates.ZERO;
-    // }
+    if(currentState == IntakeStates.INTAKE && noteLoaded()) { // stop intake if note is loaded
+      currentState = IntakeStates.ZERO;
+    }
 
     setRollerMotor(intakeStateToSpeed(this.currentState));
 
@@ -198,7 +232,7 @@ public class Intake extends SubsystemBase {
     if(!intakePID.atSetpoint()) {
       intakeRotationMotor.set(clampedSpeed);
       isAtTarget = false;
-      System.out.println("changing level");
+      //System.out.println("changing level");
     }
     else {
       intakeRotationMotor.stopMotor();

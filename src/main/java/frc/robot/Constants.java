@@ -82,8 +82,8 @@ public final class Constants {
   }
 
   public static class ClimberConstants {
-    public static final int kClimbMotorLeft = 101;
-    public static final int kClimbMotorRight = 100; 
+    public static final int kClimbMotorLeft = 15;
+    public static final int kClimbMotorRight = 16; 
     public static final double kClimbSpeed = 0.50;
     public static final int kLeftMagSensorPort = 2; 
     public static final int kRightMagSensorPort = 1;
