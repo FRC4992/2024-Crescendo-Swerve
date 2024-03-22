@@ -69,9 +69,9 @@ public class SwerveDriveCommand extends Command {
     // double rotationSpeed = rotationSpdFunction;
 
     // For deadband
-    xSpeed = Math.abs(xSpeed) > OperatorConstants.kDeadband ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpeed) > OperatorConstants.kDeadband ? ySpeed : 0.0;
-    rotationSpeed = Math.abs(rotationSpeed) > OperatorConstants.kDeadband ? rotationSpeed : 0.0;
+    xSpeed = Math.abs(xSpeed) > OperatorConstants.kDeadbandLeftStick ? xSpeed : 0.0;
+    ySpeed = Math.abs(ySpeed) > OperatorConstants.kDeadbandLeftStick ? ySpeed : 0.0;
+    rotationSpeed = Math.abs(rotationSpeed) > OperatorConstants.kDeadbandRightStick ? rotationSpeed : 0.0;
 
     // Rate limiter
     //xSpeed = xLimiter.calculate(xSpeed) * Constants.DriveConstants.TELEOP_MAX_SPEED_METERS_PER_SECOND;

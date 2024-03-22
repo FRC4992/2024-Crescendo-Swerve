@@ -19,7 +19,8 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kDeadband = 0.15;
+    public static final double kDeadbandLeftStick = 0.15;
+    public static final double kDeadbandRightStick = 0.19;
   }
 
   public static class DriveConstants {
@@ -59,7 +60,7 @@ public final class Constants {
     //
 
 
-    public static final double kMaxSpeedMetersPerSec = 3.0; // add max speed
+    public static final double kMaxSpeedMetersPerSec = 1.0; // lower -> higher speed
   }
 
   public static class SwerveConstants {
@@ -96,7 +97,7 @@ public final class Constants {
     public static final double kIntakeKP = 0.03;
     public static final double kIntakeKI = 0.0;
     public static final double kIntakeKD = 0.0;
-    public static final double kIntakeMaxSpeed = 0.5; // tune
+    public static final double kIntakeMaxSpeed = 0.6; // tune
   }
 
 }

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.SetIntakeLevel;
 import frc.robot.commands.SetIntakeState;
@@ -84,10 +85,10 @@ public class Intake extends SubsystemBase {
         return 0.0;
       case INTAKE:
         return -0.35;
-      case FEED: 
+      case FEED:  
         return 0.90;
       case EJECT:
-        return 0.80;
+        return 0.373;
       case BOUNCE:
         return -0.30;
       default:
@@ -134,7 +135,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean noteLoaded() {
-    if(distanceSensor.getRange() < 8.0) { // set measurement
+    if(distanceSensor.getRange() < 15.5) { // set measurement
       return true;
     }
     else {
@@ -181,21 +182,32 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeAndLoadCommand() {
-    return new SetIntakeLevel(IntakeLevels.GROUND)
-      .andThen(
-        new SetIntakeState(IntakeStates.INTAKE))
-      .andThen(
-        new WaitCommand(3))
-      .andThen(
-        new SetIntakeState(IntakeStates.ZERO))
-      .andThen(new SetIntakeLevel(IntakeLevels.STOWED));
-
     // return new SetIntakeLevel(IntakeLevels.GROUND)
     //   .andThen(
     //     new SetIntakeState(IntakeStates.INTAKE).until(() -> noteLoaded()))
     //   .andThen(
     //     new SetIntakeState(IntakeStates.ZERO))
     //   .andThen(new SetIntakeLevel(IntakeLevels.STOWED));
+
+    return new SetIntakeLevel(IntakeLevels.GROUND)
+      .andThen(
+        new SetIntakeState(IntakeStates.INTAKE))
+      .andThen(
+        new WaitUntilCommand(this::noteLoaded))
+      .andThen(
+        new SetIntakeState(IntakeStates.ZERO))
+      .andThen(new SetIntakeLevel(IntakeLevels.STOWED));
+  }
+
+  public Command autoIntakeAndLoadCommand() {
+    return new SetIntakeLevel(IntakeLevels.GROUND)
+      .andThen(
+        new SetIntakeState(IntakeStates.INTAKE))
+      .andThen(
+        new WaitCommand(2.5))
+      .andThen(
+        new SetIntakeState(IntakeStates.ZERO))
+      .andThen(new SetIntakeLevel(IntakeLevels.STOWED));
   }
 
   public Command getAmpShootCommand() {
@@ -212,6 +224,7 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     //System.out.println(intakeRotationEncoder.getPosition());
     //System.out.println("current level: " + this.currentLevel);
+    //System.out.println(distanceSensor.getRange());
 
     double currentPosition = intakeRotationEncoder.getPosition();
     double targetPosition = intakeLevelToEncoderPosition(currentLevel);

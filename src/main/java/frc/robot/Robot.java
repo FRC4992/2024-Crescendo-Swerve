@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +33,11 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     // reset 
+
+    // UsbCamera camera = new UsbCamera("cam0", 0);
+    // camera.setFPS(15);
+    // camera.setResolution(320, 420);
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -62,6 +69,9 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // check:
+    // CommandScheduler.getInstance().cancelAll();
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -72,7 +82,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    // SmartDashboard.putNumber("FLModule:", RobotContainer.swerve.FLModule.getDistancePosition());
+    // SmartDashboard.putNumber("FRModule:", RobotContainer.swerve.FRModule.getDistancePosition());
+    // SmartDashboard.putNumber("BLModule:", RobotContainer.swerve.BLModule.getDistancePosition());
+    // SmartDashboard.putNumber("BRModule:", RobotContainer.swerve.BRModule.getDistancePosition());
+
+    // System.out.println(RobotContainer.swerve.FLModule.getPosition());
+    // System.out.println(RobotContainer.swerve.FRModule.getPosition());
+    // System.out.println(RobotContainer.swerve.BLModule.getPosition());
+    // System.out.println(RobotContainer.swerve.BRModule.getPosition());
+  }
 
   @Override
   public void teleopInit() {
@@ -80,6 +100,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -90,6 +111,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    // SmartDashboard.putNumber("FLModule:", RobotContainer.swerve.FLModule.getDistancePosition());
+    // SmartDashboard.putNumber("FRModule:", RobotContainer.swerve.FRModule.getDistancePosition());
+    // SmartDashboard.putNumber("BLModule:", RobotContainer.swerve.BLModule.getDistancePosition());
+    // SmartDashboard.putNumber("BRModule:", RobotContainer.swerve.BRModule.getDistancePosition());
+    // SmartDashboard.putNumber("nav", RobotContainer.swerve.getHeading());
+    //System.out.println(RobotContainer.swerve.navx.getRotation2d());
   }
 
   @Override

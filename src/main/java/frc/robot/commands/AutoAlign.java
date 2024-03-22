@@ -13,7 +13,7 @@ import frc.robot.RobotContainer;
 
 public class AutoAlign extends Command {
 
-  PIDController rotationalPID = new PIDController(0.05, 0, 0);
+  PIDController rotationalPID = new PIDController(0.01, 0, 0);
   PIDController translationalPID = new PIDController(0.1, 0, 0);
 
   /** Creates a new AutoAlign. */
@@ -22,7 +22,7 @@ public class AutoAlign extends Command {
     addRequirements(RobotContainer.swerve);
 
     rotationalPID.setTolerance(1);
-    translationalPID.setTolerance(0.25);
+    translationalPID.setTolerance(0.1);
   }
 
   // Called when the command is initially scheduled.
@@ -39,7 +39,7 @@ public class AutoAlign extends Command {
     double ySpeed = translationalPID.calculate(yMeasurement, 1.02);
 
     if(RobotContainer.getLimelightFoundTarget()) {
-      ChassisSpeeds chassisSpeeds = new ChassisSpeeds(ySpeed, 0, xSpeed);
+      ChassisSpeeds chassisSpeeds = new ChassisSpeeds(-ySpeed, 0, xSpeed);
       SwerveModuleState[] moduleStates = Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC.toSwerveModuleStates(chassisSpeeds);
       RobotContainer.swerve.setModuleStates(moduleStates);
     }

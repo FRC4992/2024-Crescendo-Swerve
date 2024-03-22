@@ -10,10 +10,12 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -110,6 +112,10 @@ public class SwerveModule extends SubsystemBase {
     return new SwerveModuleState(getDistanceVelocity(), new Rotation2d(getRotationPosition()));
   }
 
+  public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(getDistancePosition(), new Rotation2d(getRotationPosition()));
+  }
+
   public void setDesiredState(SwerveModuleState state) {
     if(Math.abs(state.speedMetersPerSecond) < 0.001) {
       stop();
@@ -120,13 +126,18 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.set(state.speedMetersPerSecond / DriveConstants.kMaxSpeedMetersPerSec); // change to increase speed
     rotationMotor.set(rotationPIDController.calculate(getRotationPosition(), state.angle.getRadians()));
     
-    SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] state", state.toString());
+    // SmartDashboard.putString("Swerve[" + absoluteEncoder.getDeviceID() + "] state", state.toString());
 
   }
 
   public void stop() {
     driveMotor.set(0);
     rotationMotor.set(0);
+  }
+
+  public void setBrakeMode() {
+    driveMotor.setIdleMode(IdleMode.kBrake);
+    rotationMotor.setIdleMode(IdleMode.kBrake);
   }
 
   @Override

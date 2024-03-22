@@ -4,12 +4,14 @@
 
 package frc.robot;
 
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Extend;
 import frc.robot.commands.IntakeFromShooter;
+import frc.robot.commands.ManualSetIntakeState;
 import frc.robot.commands.ResetHeading;
 import frc.robot.commands.Retract;
 import frc.robot.commands.SetIntakeLevel;
@@ -24,13 +26,34 @@ import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Intake.IntakeLevels;
 import frc.robot.subsystems.Intake.IntakeStates;
 
+import java.sql.Driver;
+import java.util.List;
+
 import javax.swing.border.EtchedBorder;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.proto.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -48,11 +71,12 @@ public class RobotContainer {
   public static final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-
   public static SwerveDrive swerve = new SwerveDrive();
   public static Shooter shooter = new Shooter();
   public static Climber climber = new Climber();
   public static Intake intake = new Intake();
+
+  private final SendableChooser<Command> autoChooser;
 
   public static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -73,9 +97,15 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    NamedCommands.registerCommand("ShootCommand", shooter.getSpeakerShootCommand());
+    NamedCommands.registerCommand("Intake", intake.autoIntakeAndLoadCommand());
 
-    swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, false));
+    swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, true));
     //swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, 0.5, 0, 0, false));
+    
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
     configureBindings();
   }
 
@@ -103,16 +133,17 @@ public class RobotContainer {
     //m_driverController.rightBumper().onTrue(new Shoot());
     m_driverController.rightBumper().onTrue(shooter.getSpeakerShootCommand());
 
-    //m_driverController.y().whileTrue(new AutoAlign());
-    m_driverController.y().onTrue(new ResetHeading());
+    m_driverController.y().whileTrue(new AutoAlign());
+    m_driverController.povLeft().onTrue(new ResetHeading());
 
     //m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
     m_driverController.b().onTrue(intake.intakeAndLoadCommand());
+    m_driverController.a().onTrue(intake.getAmpShootCommand());
     m_driverController.x().onTrue(new SetIntakeLevel(IntakeLevels.STOWED)); //
-    m_driverController.a().onTrue(new SetIntakeLevel(IntakeLevels.AMP)); // 
-    m_driverController.povDown().whileTrue(new SetIntakeState(IntakeStates.INTAKE)); // 
-    m_driverController.povUp().whileTrue(new SetIntakeState(IntakeStates.FEED)); // 
-    m_driverController.povRight().whileTrue(new SetIntakeState(IntakeStates.EJECT)); // 
+    //m_driverController.a().onTrue(new SetIntakeLevel(IntakeLevels.AMP)); // 
+    m_driverController.povDown().whileTrue(new ManualSetIntakeState(IntakeStates.INTAKE)); // 
+    m_driverController.povUp().whileTrue(new ManualSetIntakeState(IntakeStates.FEED)); // 
+    m_driverController.povRight().whileTrue(new ManualSetIntakeState(IntakeStates.EJECT)); // 
     m_driverController.back().whileTrue(new Retract());
     m_driverController.start().whileTrue(new Extend());
   }
@@ -124,6 +155,19 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    //return Autos.exampleAuto(m_exampleSubsystem);
+    //PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
+    // SmartDashboard.putString("Path Poses", path.getPathPoses().toString());
+    // SmartDashboard.putString("Path Points", path.getAllPathPoints().toString());
+
+    // return new SequentialCommandGroup( // test (1e) for single paths:
+    //   new InstantCommand(() -> swerve.resetPose(path.getPreviewStartingHolonomicPose())),
+    //   AutoBuilder.followPath(path),
+    //   new InstantCommand(() -> swerve.stopModules())
+    // );
+    
+    // (2d0): PRELOAD AUTO IF PROCESSING CAUSES DELAY
+    //return new PathPlannerAuto("BlueAuto1(Mid)");
+    return autoChooser.getSelected();
   }
 }
