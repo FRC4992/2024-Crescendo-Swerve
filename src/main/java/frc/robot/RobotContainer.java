@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.AutoAlign3D;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Extend;
@@ -84,6 +85,7 @@ public class RobotContainer {
   public static NetworkTableEntry tx = table.getEntry("tx");
   public static NetworkTableEntry ta = table.getEntry("ta");
   public static NetworkTableEntry tv = table.getEntry("tv");
+  public static NetworkTableEntry t6t_cs = table.getEntry("t6t_cs");
 
   public static double getLimelightX() {
     return tx.getDouble(0.0);
@@ -93,6 +95,10 @@ public class RobotContainer {
   }
   public static boolean getLimelightFoundTarget() {
     return tv.getDouble(0) == 1;
+  }
+
+  public static double[] getLimelight3DPose() {
+    return t6t_cs.getDoubleArray(new double[]{0.0});
   }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -134,7 +140,8 @@ public class RobotContainer {
     //m_driverController.rightBumper().onTrue(new Shoot());
     m_driverController.rightBumper().onTrue(shooter.getSpeakerShootCommand());
 
-    m_driverController.y().whileTrue(new AutoAlign());
+    //m_driverController.y().whileTrue(new AutoAlign());
+    m_driverController.y().whileTrue(new AutoAlign3D());
     m_driverController.povLeft().onTrue(new ResetHeading());
 
     //m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
