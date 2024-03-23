@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -47,7 +48,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command getSpeakerShootCommand() {
-    return new InstantCommand(this::shoot, this)
+    return 
+     new InstantCommand(this::shoot, this)
       .andThen(
         new InstantCommand(this::feed, this))
       .andThen(
@@ -61,7 +63,7 @@ public class Shooter extends SubsystemBase {
       .andThen(
         new WaitCommand(0.75))
       .andThen(
-        new SetIntakeState(IntakeStates.ZERO))
+          new SetIntakeState(IntakeStates.ZERO))
       .andThen(
         new InstantCommand(this::stopShootMotor, this))
       .andThen(

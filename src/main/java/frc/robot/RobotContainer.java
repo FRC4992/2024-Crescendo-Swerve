@@ -147,10 +147,10 @@ public class RobotContainer {
     //m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
     m_driverController.b().onTrue(intake.intakeAndLoadCommand());
     m_driverController.a().onTrue(intake.getAmpShootCommand());
-    //m_driverController.x().onTrue(new SetIntakeLevel(IntakeLevels.STOWED));
-    m_driverController.x().onTrue(new InstantCommand(
-      () -> CommandScheduler.getInstance().cancelAll()
-    ));
+    m_driverController.x().onTrue(new SetIntakeLevel(IntakeLevels.STOWED));
+    // m_driverController.x().onTrue(new InstantCommand(
+    //   () -> CommandScheduler.getInstance().cancelAll()
+    // ));
     
     //m_driverController.a().onTrue(new SetIntakeLevel(IntakeLevels.AMP)); // 
     m_driverController.povDown().whileTrue(new ManualSetIntakeState(IntakeStates.INTAKE)); // 
