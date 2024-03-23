@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8234011379019345,
-      "y": 6.506859629501854
+      "x": 0.92,
+      "y": 6.64
     },
     "rotation": 60.0
   },
@@ -18,39 +18,41 @@
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 0.25
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(2)Pickup1stNote"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(2)Pickup2ndNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(2)ReturnSpeaker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootCommand"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootCommand"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(2)ReturnSpeaker"
+                }
+              }
+            ]
           }
         },
         {
@@ -60,21 +62,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "(2)ReturnToSpeakerMid"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.25
           }
         },
         {
