@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2202882421032024,
+      "x": 15.32,
       "y": 5.55
     },
-    "rotation": 0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(1)Pickup1stNote"
+                  "pathName": "(Red1)Pickup1stNote"
                 }
               }
             ]
@@ -49,7 +49,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(1)ReturnSpeaker"
+                  "pathName": "(Red1)ReturnSpeaker"
                 }
               }
             ]
@@ -58,13 +58,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(1)PickupMidNote"
+            "pathName": "(Red1)PickupMidNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(1)ReturnToSpeakerMid"
+            "pathName": "(Red1)ReturnToSpeakerMid"
           }
         },
         {
