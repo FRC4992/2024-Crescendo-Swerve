@@ -106,16 +106,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
 
-    SmartDashboard.putData(
-    "[DRIVE] Output Current [FL]", FLModule.driveMotor.getOutputCurrent(),\n,
-    "[DRIVE] Output Current [FR]", FRModule.driveMotor.getOutputCurrent(),\n, 
-    "[DRIVE] Output Current [BL]", BLModule.driveMotor.getOutputCurrent(),\n,
-    "[DRIVE] Output Current [BR]", BRModule.driveMotor.getOutputCurrent(),\n,
-    "[ROTATION] Output Current [FL]", FLModule.rotationMotor.getOutputCurrent(),\n,
-    "[ROTATION] Output Current [FR]", FRModule.rotationMotor.getOutputCurrent(),\n,
-    "[ROTATION] Output Current [BL]", BLModule.rotationMotor.getOutputCurrent(),\n,
-    "[ROTATION] Output Current [BR]", BRModule.rotationMotor.getOutputCurrent());
-
     NamedCommands.registerCommand("ShootCommand", shooter.getSpeakerShootCommand());
     NamedCommands.registerCommand("Intake", intake.autoIntakeAndLoadCommand());
 
