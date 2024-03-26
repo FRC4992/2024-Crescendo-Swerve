@@ -53,7 +53,7 @@ public final class Constants {
     public static final int kBLCancoderID = 13; //
     public static final int kBRCancoderID = 12; //
     // 
-    public static final double kFLOffset = -0.108154;
+    public static final double kFLOffset = -0.120850;
     public static final double kFROffset = 0.446777;
     public static final double kBLOffset = 0.464355;
     public static final double kBROffset = 0.058105;
