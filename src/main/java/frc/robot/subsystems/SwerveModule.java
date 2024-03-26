@@ -44,8 +44,8 @@ public class SwerveModule extends SubsystemBase {
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveMotorID, int rotationMotorID, int canCoderID, boolean driveMotorReversed, 
                       boolean rotationMotorReversed, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
-    
-    driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
+
+                        driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
     rotationMotor = new CANSparkMax(rotationMotorID, MotorType.kBrushless);
     
     driveMotor.setInverted(driveMotorReversed);
@@ -63,9 +63,15 @@ public class SwerveModule extends SubsystemBase {
     rotationPIDController = new PIDController(SwerveConstants.KPTurning, 0, 0);
     rotationPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
+
     this.absoluteEncoderOffsetRaw = absoluteEncoderOffset;
     this.absoluteEncoderOffsetDeg = this.absoluteEncoderOffsetRaw * 360;
     this.absoluteEncoderOffsetRad = this.absoluteEncoderOffsetRaw * 2 * Math.PI;
+
+    driveMotor.setSmartCurrentLimit(40);
+    rotationMotor.setSmartCurrentLimit(40);
+    driveMotor.burnFlash();
+    rotationMotor.burnFlash();
 
     resetEncoders();
   }

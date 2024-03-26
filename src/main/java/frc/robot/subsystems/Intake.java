@@ -172,6 +172,10 @@ public class Intake extends SubsystemBase {
     }
     return speed;
   }
+  
+  public void setManualIntakeRotationSpeed(double speed) {
+    intakeRotationMotor.set(speed);
+  }
 
   public void setBrakeMode() {
     intakeRotationMotor.setIdleMode(IdleMode.kBrake);

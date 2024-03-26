@@ -12,6 +12,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Extend;
 import frc.robot.commands.IntakeFromShooter;
+import frc.robot.commands.ManualIntakeSpeed;
 import frc.robot.commands.ManualSetIntakeState;
 import frc.robot.commands.ResetHeading;
 import frc.robot.commands.Retract;
@@ -154,6 +155,8 @@ public class RobotContainer {
     
     //m_driverController.a().onTrue(new SetIntakeLevel(IntakeLevels.AMP)); // 
     m_driverController.povDown().whileTrue(new ManualSetIntakeState(IntakeStates.INTAKE)); // 
+    //m_driverController.povDown().whileTrue(new ManualIntakeSpeed());
+
     m_driverController.povUp().whileTrue(new ManualSetIntakeState(IntakeStates.FEED)); // 
     m_driverController.povRight().whileTrue(new ManualSetIntakeState(IntakeStates.EJECT)); // 
     m_driverController.back().whileTrue(new Retract());
