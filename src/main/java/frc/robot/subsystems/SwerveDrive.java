@@ -164,6 +164,15 @@ public class SwerveDrive extends SubsystemBase {
     odometry.update(getRotation2d(), getPositions());
     // SmartDashboard.putNumber("Heading", getHeading());
     // SmartDashboard.putString("Robot Location", getPose2d().getTranslation().toString());
+    SmartDashboard.putNumber("[DRIVE] Output Current [FL]", FLModule.driveMotor.getOutputCurrent());
+    SmartDashboard.putNumber("[DRIVE] Output Current [FR]", FRModule.driveMotor.getOutputCurrent());
+    SmartDashboard.putNumber("[DRIVE] Output Current [BL]", BLModule.driveMotor.getOutputCurrent());
+    SmartDashboard.putNumber("[DRIVE] Output Current [BR]", BRModule.driveMotor.getOutputCurrent());
+    SmartDashboard.putNumber("[ROTATION] Output Current [FL]", FLModule.driveMotor.getOutputCurrent());
+    SmartDashboard.putNumber("[ROTATION] Output Current [FR]", FRModule.driveMotor.getOutputCurrent());
+    SmartDashboard.putNumber("[ROTATION] Output Current [BL]", BLModule.driveMotor.getOutputCurrent());
+    SmartDashboard.putNumber("[ROTATION] Output Current [BR]", BRModule.driveMotor.getOutputCurrent());
+  
   }
 
   public void resetEncoders() {
