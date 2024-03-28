@@ -107,7 +107,8 @@ public class RobotContainer {
     // Configure the trigger bindings
 
     NamedCommands.registerCommand("ShootCommand", shooter.getSpeakerShootCommand());
-    NamedCommands.registerCommand("Intake", intake.autoIntakeAndLoadCommand());
+    NamedCommands.registerCommand("Intake", intake.intakeAndLoadCommand());
+    //NamedCommands.registerCommand("Intake", intake.autoIntakeAndLoadCommand());
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, true));
     //swerve.setDefaultCommand(new SwerveDriveCommand(swerve, m_driverController, 0.5, 0, 0, false));
