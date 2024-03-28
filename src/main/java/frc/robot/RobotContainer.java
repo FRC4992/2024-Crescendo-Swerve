@@ -99,7 +99,7 @@ public class RobotContainer {
   }
 
   public static double[] getLimelight3DPose() {
-    return t6t_cs.getDoubleArray(new double[]{0.0});
+    return t6t_cs.getDoubleArray(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
   }
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -143,8 +143,8 @@ public class RobotContainer {
     //m_driverController.rightBumper().onTrue(new Shoot());
     m_driverController.rightBumper().onTrue(shooter.getSpeakerShootCommand());
 
-    //m_driverController.y().whileTrue(new AutoAlign());
-    m_driverController.y().whileTrue(new AutoAlign3D());
+    m_driverController.y().whileTrue(new AutoAlign());
+    //m_driverController.y().whileTrue(new AutoAlign3D());
     m_driverController.povLeft().onTrue(new ResetHeading());
 
     //m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
