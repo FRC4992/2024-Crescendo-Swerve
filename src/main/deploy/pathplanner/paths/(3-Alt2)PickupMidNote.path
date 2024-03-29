@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.78,
-        "y": 4.4
+        "x": 1.28,
+        "y": 3.533974596215562
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.865382962318089,
-        "y": 1.5875484168271143
+        "x": 2.473615939598292,
+        "y": 0.76
       },
       "prevControl": {
-        "x": 3.8653829623180886,
-        "y": 1.5875484168271143
+        "x": 1.4736159395982922,
+        "y": 0.76
       },
       "nextControl": {
-        "x": 5.8653829623180895,
-        "y": 1.5875484168271143
+        "x": 3.4736159395982935,
+        "y": 0.76
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.6331482942864115,
-        "y": 2.4335446126362994
+        "x": 7.61,
+        "y": 0.76
       },
       "prevControl": {
-        "x": 6.733148294286411,
-        "y": 2.4335446126362994
+        "x": 6.71,
+        "y": 0.76
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.65,
       "rotationDegrees": 0,
       "rotateFast": true
     }
@@ -55,7 +55,7 @@
     {
       "name": "slow turning",
       "minWaypointRelativePos": 0.05,
-      "maxWaypointRelativePos": 0.45,
+      "maxWaypointRelativePos": 0.65,
       "constraints": {
         "maxVelocity": 3.0,
         "maxAcceleration": 0.4,

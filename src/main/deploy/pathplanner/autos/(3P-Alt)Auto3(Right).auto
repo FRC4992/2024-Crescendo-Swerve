@@ -62,7 +62,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(3)PickupMidNote"
+                  "pathName": "(3-Alt2)PickupMidNote"
                 }
               },
               {
@@ -90,7 +90,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(3)ReturnSpeakerMid"
+            "pathName": "(3-Alt2)ReturnSpeakerMid"
           }
         },
         {
