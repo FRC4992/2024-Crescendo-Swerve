@@ -27,12 +27,12 @@ public class Extend extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Timer.getFPGATimestamp() - elapTime <= 5){
+    //if (Timer.getFPGATimestamp() - elapTime <= 5){
       RobotContainer.climber.extend();
-    }
-    else {
-      RobotContainer.climber.stopClimbMotors();
-    }
+    //}
+    //else {
+      //RobotContainer.climber.stopClimbMotors();
+    //}
   }
 
   // Called once the command ends or is interrupted.
