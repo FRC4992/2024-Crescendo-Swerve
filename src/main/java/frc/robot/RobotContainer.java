@@ -29,6 +29,7 @@ import frc.robot.subsystems.Intake.IntakeLevels;
 import frc.robot.subsystems.Intake.IntakeStates;
 
 import java.sql.Driver;
+import java.time.Instant;
 import java.util.List;
 
 import javax.swing.border.EtchedBorder;
@@ -143,14 +144,22 @@ public class RobotContainer {
     //m_driverController.rightBumper().onTrue(new Shoot());
     m_driverController.rightBumper().onTrue(shooter.getSpeakerShootCommand());
 
-    m_driverController.y().whileTrue(new AutoAlign());
+
+    m_driverController.y().onTrue(new InstantCommand(() -> intake.setState(IntakeStates.ZERO), intake).andThen(
+     new InstantCommand(() -> intake.setLevel(IntakeLevels.RESET) )
+    )
+    );
+    // m_driverController.y().whileTrue(new AutoAlign());
     //m_driverController.y().whileTrue(new AutoAlign3D());
     m_driverController.povLeft().onTrue(new ResetHeading());
 
     //m_driverController.b().onTrue(new SetIntakeLevel(IntakeLevels.GROUND));
     m_driverController.b().onTrue(intake.intakeAndLoadCommand());
     m_driverController.a().onTrue(intake.getAmpShootCommand());
-    m_driverController.x().onTrue(new SetIntakeLevel(IntakeLevels.STOWED));
+    m_driverController.x().onTrue(new InstantCommand(() -> intake.setState(IntakeStates.ZERO), intake).andThen(
+     () -> intake.setLevel(IntakeLevels.STOWED)
+    )
+    );
     // m_driverController.x().onTrue(new InstantCommand(
     //   () -> CommandScheduler.getInstance().cancelAll()
     // ));
@@ -161,8 +170,8 @@ public class RobotContainer {
 
     m_driverController.povUp().whileTrue(new ManualSetIntakeState(IntakeStates.FEED)); // 
     m_driverController.povRight().whileTrue(new ManualSetIntakeState(IntakeStates.EJECT)); // 
-    m_driverController.back().whileTrue(new Retract());
-    m_driverController.start().whileTrue(new Extend());
+    m_driverController.back().whileTrue(new Extend());
+    m_driverController.start().whileTrue(new Retract());
   }
 
   /**

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.96,
-      "y": 4.24
+      "x": 1.35,
+      "y": 5.55
     },
-    "rotation": -60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(3)Pickup1stNote"
+                  "pathName": "(1)Pickup1stNote"
                 }
               }
             ]
@@ -40,17 +40,17 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(3)ReturnSpeaker"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "ShootCommand"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(1)ReturnSpeaker"
+                }
               }
             ]
           }
@@ -60,28 +60,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "(3)PickupMidNote"
+                  "name": "Intake"
                 }
               },
               {
-                "type": "deadline",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 6.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake"
-                      }
-                    }
-                  ]
+                  "pathName": "SOURCESIDE3P(PICKUP)"
                 }
               }
             ]
@@ -90,7 +77,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(3)ReturnSpeakerMid"
+            "pathName": "SOURCESIDE3P(RETURN)"
           }
         },
         {

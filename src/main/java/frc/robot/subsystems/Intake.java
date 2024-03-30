@@ -14,7 +14,9 @@ import com.revrobotics.Rev2mDistanceSensor.Port;
 import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -69,6 +71,7 @@ public class Intake extends SubsystemBase {
     GROUND, // Ground pickup
     AMP, // Amp scoring
     STOWED, // Neutral position / feed to shooter
+    RESET, //reset to limit switch
   }
 
   public enum IntakeStates {
@@ -84,11 +87,11 @@ public class Intake extends SubsystemBase {
       case ZERO:
         return 0.0;
       case INTAKE:
-        return -0.35;
+        return -0.4;
       case FEED:  
         return 0.90;
       case EJECT:
-        return 0.373;
+        return 0.4;
       case BOUNCE:
         return -0.30;
       default:
@@ -104,6 +107,8 @@ public class Intake extends SubsystemBase {
         return -43.3817138861875;
       case STOWED:
         return 0.0;
+      case RESET:
+        return 15.0;
       default:
         return 0.0;
     }
@@ -232,9 +237,15 @@ public class Intake extends SubsystemBase {
 
     double currentPosition = intakeRotationEncoder.getPosition();
     double targetPosition = intakeLevelToEncoderPosition(currentLevel);
+    // System.out.println("target position: " + targetPosition);
+    SmartDashboard.putNumber("Target Position", targetPosition);
 
     if(hasReachedMax()) {
-      resetEncoder(0); 
+      resetEncoder(0);
+      if(currentLevel == IntakeLevels.RESET) {
+        //new InstantCommand(() -> new SetIntakeLevel(IntakeLevels.STOWED), this); 
+        setLevel(IntakeLevels.STOWED);
+      }  
     }
 
     if(currentState == IntakeStates.INTAKE && noteLoaded()) { // stop intake if note is loaded

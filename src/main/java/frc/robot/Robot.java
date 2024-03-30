@@ -71,6 +71,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // check:
     // CommandScheduler.getInstance().cancelAll();
+    RobotContainer.swerve.resetEncoders();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -100,6 +101,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    RobotContainer.swerve.resetEncoders();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
@@ -117,6 +119,9 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("BRModule:", RobotContainer.swerve.BRModule.getDistancePosition());
     // SmartDashboard.putNumber("nav", RobotContainer.swerve.getHeading());
     //System.out.println(RobotContainer.swerve.navx.getRotation2d());
+    //System.out.println("Absolute Encoder: " + RobotContainer.swerve.FLModule.getAbsoluteEncoderDeg());
+    //System.out.println("Left mag sensor: " + RobotContainer.climber.isBottomedOutLeft());
+    //System.out.println("Right mag sensor: " + RobotContainer.climber.isBottomedOutRight());
   }
 
   @Override

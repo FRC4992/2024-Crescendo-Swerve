@@ -53,7 +53,7 @@ public final class Constants {
     public static final int kBLCancoderID = 13; //
     public static final int kBRCancoderID = 12; //
     // 
-    public static final double kFLOffset = -0.120850;
+    public static final double kFLOffset = -0.121338;
     public static final double kFROffset = 0.440186;
     public static final double kBLOffset = 0.469238;
     public static final double kBROffset = 0.053467;
@@ -97,7 +97,7 @@ public final class Constants {
     public static final double kIntakeKP = 0.03;
     public static final double kIntakeKI = 0.0;
     public static final double kIntakeKD = 0.0;
-    public static final double kIntakeMaxSpeed = 0.6; // tune
+    public static final double kIntakeMaxSpeed = 0.8; // tune
   }
 
 }

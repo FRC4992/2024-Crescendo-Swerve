@@ -29,7 +29,7 @@ public class SwerveModule extends SubsystemBase {
   
   RelativeEncoder distanceEncoder;
   RelativeEncoder rotationEncoder;
-  CANcoder absoluteEncoder;
+  public CANcoder absoluteEncoder;
   CANcoderConfiguration canCoderConfig;
 
   boolean absoluteEncoderReversed;

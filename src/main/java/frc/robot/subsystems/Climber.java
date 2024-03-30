@@ -40,8 +40,8 @@ public class Climber extends SubsystemBase {
   }
 
   public void extend() {
-    climbMotorLeft.set(-ClimberConstants.kClimbSpeed);
-    climbMotorRight.set(-ClimberConstants.kClimbSpeed);
+    climbMotorLeft.set(ClimberConstants.kClimbSpeed);
+    climbMotorRight.set(ClimberConstants.kClimbSpeed);
   }
   
   public void stopClimbMotors() {
@@ -51,13 +51,13 @@ public class Climber extends SubsystemBase {
 
   public void retract() {
     if(!isBottomedOutLeft()) {
-      climbMotorLeft.set(ClimberConstants.kClimbSpeed);
+      climbMotorLeft.set(-ClimberConstants.kClimbSpeed);
     }
     else {
       climbMotorLeft.stopMotor();
     }
     if(!isBottomedOutRight()) {
-      climbMotorRight.set(ClimberConstants.kClimbSpeed);
+      climbMotorRight.set(-ClimberConstants.kClimbSpeed);
     }
     else {
       climbMotorRight.stopMotor();

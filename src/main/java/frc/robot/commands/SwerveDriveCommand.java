@@ -69,9 +69,32 @@ public class SwerveDriveCommand extends Command {
     // double rotationSpeed = rotationSpdFunction;
 
     // For deadband
-    xSpeed = Math.abs(xSpeed) > OperatorConstants.kDeadbandLeftStick ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpeed) > OperatorConstants.kDeadbandLeftStick ? ySpeed : 0.0;
-    rotationSpeed = Math.abs(rotationSpeed) > OperatorConstants.kDeadbandRightStick ? rotationSpeed : 0.0;
+    // xSpeed = Math.abs(xSpeed) > OperatorConstants.kDeadbandLeftStick ? xSpeed : 0.0;
+    // ySpeed = Math.abs(ySpeed) > OperatorConstants.kDeadbandLeftStick ? ySpeed : 0.0;
+    // rotationSpeed = Math.abs(rotationSpeed) > OperatorConstants.kDeadbandRightStick ? rotationSpeed : 0.0;
+
+    //Haashim deadband logic here
+
+    if(Math.abs(xSpeed) < OperatorConstants.kDeadbandLeftStick){
+      xSpeed = 0;
+    }
+    else{
+      xSpeed = (1/(1 - OperatorConstants.kDeadbandLeftStick)) * (xSpeed + (-Math.signum(xSpeed) * OperatorConstants.kDeadbandLeftStick));
+    }
+
+    if(Math.abs(ySpeed) < OperatorConstants.kDeadbandLeftStick){
+      ySpeed = 0;
+    }
+    else{
+      ySpeed = (1/(1 - OperatorConstants.kDeadbandLeftStick)) * (ySpeed + (-Math.signum(ySpeed) * OperatorConstants.kDeadbandLeftStick));
+    }
+
+    if(Math.abs(rotationSpeed) < OperatorConstants.kDeadbandRightStick){
+      rotationSpeed = 0;
+    }
+    else{
+      rotationSpeed = (1/(1 - OperatorConstants.kDeadbandRightStick)) * (rotationSpeed + (-Math.signum(rotationSpeed) * OperatorConstants.kDeadbandRightStick));
+    }
 
     // Rate limiter
     //xSpeed = xLimiter.calculate(xSpeed) * Constants.DriveConstants.TELEOP_MAX_SPEED_METERS_PER_SECOND;

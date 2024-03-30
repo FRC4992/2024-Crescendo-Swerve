@@ -22,47 +22,9 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
-                  "pathName": "(3)Pickup1stNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(3)ReturnSpeaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(3)PickupMidNote"
+                  "pathName": "(3-Alt2)PickupMidNote"
                 }
               },
               {
@@ -90,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(3)ReturnSpeakerMid"
+            "pathName": "(3-Alt2)ReturnSpeakerMid"
           }
         },
         {
