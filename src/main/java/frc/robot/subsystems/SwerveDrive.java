@@ -10,6 +10,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -19,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -67,7 +69,11 @@ public class SwerveDrive extends SubsystemBase {
 
   //SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC, getRotation2d(), getPositions());
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC, new Rotation2d(0), getPositions());
-  
+  SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC, 
+    new Rotation2d(0), 
+    getPositions(), 
+    new Pose2d());
+
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     AutoBuilder.configureHolonomic(
@@ -129,12 +135,20 @@ public class SwerveDrive extends SubsystemBase {
     return positions;
   }
 
+  // public Pose2d getPose2d() {
+  //   return odometry.getPoseMeters();
+  // }
+
   public Pose2d getPose2d() {
-    return odometry.getPoseMeters();
+    return poseEstimator.getEstimatedPosition();
   }
 
+  // public void resetPose(Pose2d pose) {
+  //   odometry.resetPosition(getRotation2d(), getPositions(), pose);
+  // }
+
   public void resetPose(Pose2d pose) {
-    odometry.resetPosition(getRotation2d(), getPositions(), pose);
+    poseEstimator.resetPosition(getRotation2d(), getPositions(), pose);
   }
 
   public ChassisSpeeds getCurrentSpeeds() {
@@ -161,7 +175,13 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    odometry.update(getRotation2d(), getPositions());
+    
+    //odometry.update(getRotation2d(), getPositions());
+    
+    poseEstimator.update(getRotation2d(), getPositions());
+    
+    // update by adding vision measurement
+
     // SmartDashboard.putNumber("Heading", getHeading());
     // SmartDashboard.putString("Robot Location", getPose2d().getTranslation().toString());
     SmartDashboard.putNumber("[DRIVE] Output Current [FL]", FLModule.driveMotor.getOutputCurrent());
