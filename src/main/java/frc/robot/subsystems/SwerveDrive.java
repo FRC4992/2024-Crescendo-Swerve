@@ -10,6 +10,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,10 +21,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 
@@ -66,9 +69,10 @@ public class SwerveDrive extends SubsystemBase {
     false); // abs enc reversed, add to constants, parameter here
 
   public AHRS navx = new AHRS(SPI.Port.kMXP);
+  public Field2d field = new Field2d();
 
   //SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC, getRotation2d(), getPositions());
-  SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC, new Rotation2d(0), getPositions());
+  //SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC, new Rotation2d(0), getPositions());
   SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC, 
     new Rotation2d(0), 
     getPositions(), 
@@ -135,21 +139,21 @@ public class SwerveDrive extends SubsystemBase {
     return positions;
   }
 
-  public Pose2d getPose2d() {
-    return odometry.getPoseMeters();
-  }
-
   // public Pose2d getPose2d() {
-  //   return poseEstimator.getEstimatedPosition();
+  //   return odometry.getPoseMeters();
   // }
 
-  public void resetPose(Pose2d pose) {
-    odometry.resetPosition(getRotation2d(), getPositions(), pose);
+  public Pose2d getPose2d() {
+    return poseEstimator.getEstimatedPosition();
   }
 
   // public void resetPose(Pose2d pose) {
-  //   poseEstimator.resetPosition(getRotation2d(), getPositions(), pose);
+  //   odometry.resetPosition(getRotation2d(), getPositions(), pose);
   // }
+
+  public void resetPose(Pose2d pose) {
+    poseEstimator.resetPosition(getRotation2d(), getPositions(), pose);
+  }
 
   public ChassisSpeeds getCurrentSpeeds() {
     ChassisSpeeds chassisSpeeds = Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC.toChassisSpeeds(
@@ -176,22 +180,48 @@ public class SwerveDrive extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     
-    odometry.update(getRotation2d(), getPositions());
+    //odometry.update(getRotation2d(), getPositions());
     
     //poseEstimator.update(getRotation2d(), getPositions());
-    
+
+    //boolean rejectUpdate = false;
+    LimelightHelpers.SetRobotOrientation("limelight", poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    // if(Math.abs(navx.getRate()) > 720) {
+    //   rejectUpdate = true;
+    // }
+    // if(mt2.tagCount == 0) {
+    //   rejectUpdate = true;
+    // }
+    // if(!rejectUpdate) {
+    //   poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+    //   poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+    // }
+
+    if(mt2.tagCount > 1) {
+      poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+    }
+
+    poseEstimator.update(getRotation2d(), getPositions());
+
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
+
+    SmartDashboard.putString("Field-Relative Pose", poseEstimator.getEstimatedPosition().toString());
+    SmartDashboard.putData(field);
+
     // update by adding vision measurement
 
     // SmartDashboard.putNumber("Heading", getHeading());
     // SmartDashboard.putString("Robot Location", getPose2d().getTranslation().toString());
-    SmartDashboard.putNumber("[DRIVE] Output Current [FL]", FLModule.driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber("[DRIVE] Output Current [FR]", FRModule.driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber("[DRIVE] Output Current [BL]", BLModule.driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber("[DRIVE] Output Current [BR]", BRModule.driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber("[ROTATION] Output Current [FL]", FLModule.driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber("[ROTATION] Output Current [FR]", FRModule.driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber("[ROTATION] Output Current [BL]", BLModule.driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber("[ROTATION] Output Current [BR]", BRModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[DRIVE] Output Current [FL]", FLModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[DRIVE] Output Current [FR]", FRModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[DRIVE] Output Current [BL]", BLModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[DRIVE] Output Current [BR]", BRModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[ROTATION] Output Current [FL]", FLModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[ROTATION] Output Current [FR]", FRModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[ROTATION] Output Current [BL]", BLModule.driveMotor.getOutputCurrent());
+    // SmartDashboard.putNumber("[ROTATION] Output Current [BR]", BRModule.driveMotor.getOutputCurrent());
   
   }
 
