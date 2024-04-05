@@ -135,21 +135,21 @@ public class SwerveDrive extends SubsystemBase {
     return positions;
   }
 
-  // public Pose2d getPose2d() {
-  //   return odometry.getPoseMeters();
-  // }
-
   public Pose2d getPose2d() {
-    return poseEstimator.getEstimatedPosition();
+    return odometry.getPoseMeters();
   }
 
-  // public void resetPose(Pose2d pose) {
-  //   odometry.resetPosition(getRotation2d(), getPositions(), pose);
+  // public Pose2d getPose2d() {
+  //   return poseEstimator.getEstimatedPosition();
   // }
 
   public void resetPose(Pose2d pose) {
-    poseEstimator.resetPosition(getRotation2d(), getPositions(), pose);
+    odometry.resetPosition(getRotation2d(), getPositions(), pose);
   }
+
+  // public void resetPose(Pose2d pose) {
+  //   poseEstimator.resetPosition(getRotation2d(), getPositions(), pose);
+  // }
 
   public ChassisSpeeds getCurrentSpeeds() {
     ChassisSpeeds chassisSpeeds = Constants.DriveConstants.SWERVE_DRIVE_KINEMATIC.toChassisSpeeds(
@@ -176,9 +176,9 @@ public class SwerveDrive extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     
-    //odometry.update(getRotation2d(), getPositions());
+    odometry.update(getRotation2d(), getPositions());
     
-    poseEstimator.update(getRotation2d(), getPositions());
+    //poseEstimator.update(getRotation2d(), getPositions());
     
     // update by adding vision measurement
 

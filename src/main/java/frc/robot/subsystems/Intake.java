@@ -91,9 +91,9 @@ public class Intake extends SubsystemBase {
       case FEED:  
         return 0.90;
       case EJECT:
-        return 0.4;
+        return 0.45;
       case BOUNCE:
-        return -0.30;
+        return -0.40;
       default:
         return 0.0;
     }
